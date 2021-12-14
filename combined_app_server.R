@@ -33,16 +33,18 @@ cocaine_use <- drug_data %>%
 cocaine_years <- range(cocaine_use$Year)
 
 server <- function(input, output) {
-
+  
   # Data for Plot - Fiona Jain
   plot_data <- reactive({
+    
     data <- drug_data %>%
       group_by(State, Year) %>%
-      filter(State == input$state_select) %>%
+      filter(State == input$state_select_fiona) %>%
       filter(Year <= input$year_select)
+    
     return(data)
   })
-
+  
   # Actual Plot - Fiona Jain
   output$plot <- renderPlotly({
     plot_cocaine <- ggplot(plot_data()) +
@@ -53,31 +55,31 @@ server <- function(input, output) {
           linetype = State
         ), stat = "identity", color = "#9f78eb"
       )
-
+    
     return(ggplotly(plot_cocaine))
   })
-
+  
   data <- read.csv("drugs.csv")
-
+  
   # scatter plot: use renderPlotly for plot_ly plots
   output$scatter_plot <- renderPlotly({
     alc_dis <- data %>%
       group_by(State, Year) %>%
       filter(State == "Alabama" |
-        State == "Arizona" |
-        State == "California" |
-        State == "Indiana" |
-        State == "New York" |
-        State == "Ohio" |
-        State == "Washington") %>%
+               State == "Arizona" |
+               State == "California" |
+               State == "Indiana" |
+               State == "New York" |
+               State == "Ohio" |
+               State == "Washington") %>%
       filter(Year > 2001)
-
+    
     alc_dis_over_time <- alc_dis %>%
       filter(State %in% input$State) %>%
       filter(Year <= input$Year[2], Year >= input$Year[1])
-
+    
     colnames(alc_dis_over_time)[9] <- "Percentage"
-
+    
     # use ggplot to make a scatterplot
     chart_alc_dis_over_time <- ggplot(alc_dis_over_time) +
       geom_line(
@@ -91,23 +93,23 @@ server <- function(input, output) {
       ) +
       scale_fill_distiller(palette = "Set1") +
       scale_x_continuous(limits = c(2002, 2018))
-
+    
     # return the scatter plot
     return(ggplotly(chart_alc_dis_over_time))
   })
   ########
   data_df <- read.csv(file = "drugs.csv")
-
+  
   output$usageleaf <- renderLeaflet({
     state_weed <- data_df %>%
       group_by(State) %>%
       filter(Year == input$year) %>%
       unique()
-
+    
     states <- states(cb = T) %>%
       rename(State = NAME)
-
-
+    
+    
     state_shape <- states %>%
       left_join(state_weed, by = "State") %>%
       rename(
@@ -115,10 +117,10 @@ server <- function(input, output) {
         "Marijuana Usage Rate" = Rates.Marijuana.Used.Past.Year.12.17,
         "Illicit Drug Usage Rate" = Rates.Illicit.Drugs.Cocaine.Used.Past.Year.12.17
       )
-
+    
     pal <- colorNumeric("Reds", domain = NULL, na.color = NA)
     print(input$usage_type)
-
+    
     usage_leaflet <- state_shape %>%
       leaflet(options = leafletOptions(
         maxZoom = 6,
@@ -148,7 +150,8 @@ server <- function(input, output) {
         title = input$usage_type
       ) %>%
       addControl(paste(input$usage_type, "Map in", input$year), position = "topleft")
-
+    
     return(usage_leaflet)
   })
 }
+

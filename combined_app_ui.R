@@ -38,11 +38,19 @@ state_select <- selectInput(
   multiple = FALSE
 )
 
+state_select_fiona <- selectInput(
+  inputId = "state_select_fiona",
+  label = h2("Select State"),
+  choices = cocaine_use$State,
+  selected = cocaine_use$State["California"],
+  multiple = FALSE
+)
+
 # Data Manipulation for Widget 2
 cocaine_years <- range(cocaine_use$Year)
 
 # Second Widget- Slider - Fiona Jain
-year_slider <- sliderInput(
+year_slider_fiona <- sliderInput(
   inputId = "year_select",
   label = h2("Select Year"),
   sep = "",
@@ -59,12 +67,12 @@ data <- read.csv("drugs.csv")
 alc_dis <- data %>%
   group_by(State, Year) %>%
   filter(State == "Alabama" |
-    State == "Arizona" |
-    State == "California" |
-    State == "Indiana" |
-    State == "New York" |
-    State == "Ohio" |
-    State == "Washington") %>%
+           State == "Arizona" |
+           State == "California" |
+           State == "Indiana" |
+           State == "New York" |
+           State == "Ohio" |
+           State == "Washington") %>%
   filter(Year > 2001)
 
 
@@ -82,6 +90,7 @@ state_select <- checkboxGroupInput(
 )
 
 
+
 # variable for slider that selects year range
 year_slider <- sliderInput(
   inputId = "Year",
@@ -95,16 +104,16 @@ year_slider <- sliderInput(
 
 
 intro <- tabPanel("Data Analysis - Introduction",
-  style = "color: black",
-  setBackgroundColor(
-    color = c("#F7FBFF", "#2171B5"),
-    gradient = "linear",
-    direction = "bottom"
-  ),
-  h4("Group Members: Fiona Jain, Vega Jethani, Aaron Jenkins, Mehr Mehta",
-    style = "color: red"
-  ),
-  p("We opted to investigate the topic of drug and alcohol use in the United 
+                  style = "color: black",
+                  setBackgroundColor(
+                    color = c("#F7FBFF", "#2171B5"),
+                    gradient = "linear",
+                    direction = "bottom"
+                  ),
+                  h4("Group Members: Fiona Jain, Vega Jethani, Aaron Jenkins, Mehr Mehta",
+                     style = "color: red"
+                  ),
+                  p("We opted to investigate the topic of drug and alcohol use in the United 
   States for our research, focusing on the age group 12-17. We got the datset from
   https://corgis-edu.github.io/corgis/csv/drugs/. This dataset comes from CORGIS
   Dataset Project and highlights the issue of drug and alcohol abuse (cigarettes,
@@ -125,13 +134,13 @@ intro <- tabPanel("Data Analysis - Introduction",
   pressure, legalization, and the recent opioid epidemic could all be factors.
   We'll be understanding more about these facts using the graphs in the following
     tabs.",
-    style = "font-size:18px"
-  ),
-  img(
-    src = "https://www.therecoveryvillage.com/wp-content/uploads/2017/05/shutterstock_139087055-600x400-300x200.jpg",
-    style = "display: block; margin-left: auto; margin-right: auto;",
-    height = 500, width = 500
-  )
+                    style = "font-size:18px"
+                  ),
+                  img(
+                    src = "https://www.therecoveryvillage.com/wp-content/uploads/2017/05/shutterstock_139087055-600x400-300x200.jpg",
+                    style = "display: block; margin-left: auto; margin-right: auto;",
+                    height = 500, width = 500
+                  )
 )
 
 p1 <- tabPanel(
@@ -139,9 +148,9 @@ p1 <- tabPanel(
   sidebarLayout(
     sidebarPanel(
       h4("Cocaine Usage in Children Ages 12-17",
-        style = "color: #4fc3f7"
+         style = "color: #4fc3f7"
       ),
-      state_select, year_slider
+      state_select_fiona, year_slider_fiona
     ),
     mainPanel(
       plotlyOutput("plot"),
@@ -162,7 +171,7 @@ p2 <- tabPanel(
   "Plot and Summary: Alcohol",
   fluidRow(
     h4("  Alcohol Disorder Percentage for Ages 12-17",
-      style = "color: green"
+       style = "color: green"
     ),
     column(state_select, width = 6),
     column(year_slider, width = 6)
@@ -239,7 +248,7 @@ conclusion <- tabPanel(
     h3("Every year, millions of Americans are affected by drug usage. We opted to
    focus our investigation on Cocaine, Marijuana, and Alcohol, as well as their
       use by people aged 12 to 17 in different states.",
-      style = "font-size:18px"
+       style = "font-size:18px"
     ),
     h3("One of the most intriguing findings from our examination was the rate of
       alcohol disorders in children and adolescents aged 12 to 17 by state was
@@ -253,7 +262,7 @@ conclusion <- tabPanel(
       0.0749. The lowest peak in the graph was Indiana in 2017 with a percentage
       of 0.014. Our biggest takeaway was that alcohol rates continued to decline
       steadily.",
-      style = "font-size:18px"
+       style = "font-size:18px"
     ),
     h3("Another finding from examining cocaine use among minors aged 12 to 17 in
       various states was that Washington had the greatest cocaine use in 2003
@@ -264,7 +273,7 @@ conclusion <- tabPanel(
       stayed flat prior and after 2015. Our biggest takeaway was that 2015 was a
       notable year for use of cocaine; there may have been a change of policy.
       However, all states had a general decreasing trend from 2002 to 2018.",
-      style = "font-size:18px"
+       style = "font-size:18px"
     ),
     h3("Another key conclusion from the illicit drug consumption rate research
    was that there was a surge in illicit drug use in 2004. Furthermore, marijuana
@@ -272,7 +281,7 @@ conclusion <- tabPanel(
    drug's legalization and increased accessibility. The middle part of the
    country, which includes states like Kansas, Iowa, Missouri, and Montana, had
       the greatest alcohol consumption.",
-      style = "font-size:18px"
+       style = "font-size:18px"
     ),
     h3("In the United States, drug abuse has been a serious problem among the youth.
    This has an impact on teenagers' mental, physical, and emotional wellbeing.
@@ -283,7 +292,7 @@ conclusion <- tabPanel(
    is on the rise, and it's becoming a major problem that needs to be addressed.
    It is critical to raise awareness about this issue and to take steps to assist
    individuals who are battling with drug addiction.",
-      style = "font-size:18px"
+       style = "font-size:18px"
     ),
     img(
       src = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ0ijrqdpl3_DM3LvZvBZ9ZlY_83dVE28e1Cw&usqp=CAU",
